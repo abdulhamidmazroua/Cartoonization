@@ -9,10 +9,8 @@ from tqdm import tqdm
 from datetime import datetime
 from architecture.cartoongan import cartoongan
 
-
 STYLES = ["shinkai", "hayao", "hosoda", "paprika"]
 VALID_EXTENSIONS = ['jpg', 'png']
-
 
 parser = argparse.ArgumentParser(description="transform real world images to specified cartoon style(s)")
 
@@ -52,10 +50,9 @@ parser.add_argument("--debug", action="store_true",
                     help="show the most detailed logging messages for debugging purpose")
 parser.add_argument("--show_tf_cpp_log", action="store_true")
 
+
 args = parser.parse_args()
-
 TEMPORARY_DIR = os.path.join(f"{args.output_dir}", ".tmp")
-
 
 logger = logging.getLogger("Cartoonizer")
 logger.propagate = False
@@ -68,6 +65,7 @@ else:
     logger.setLevel(log_lvl[args.logging_lvl])
 formatter = logging.Formatter(
     "[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s", "%Y-%m-%d %H:%M:%S")
+
 stdhandler = logging.StreamHandler(sys.stdout)
 stdhandler.setFormatter(formatter)
 logger.addHandler(stdhandler)
@@ -104,7 +102,7 @@ def pre_processing(image_path, expand_dim=True):
     return input_image
 
 # convert from flatten to the final image matrix
-def post_processing(transformed_image, style):
+def post_processing(transformed_image):
     if not type(transformed_image) == np.ndarray:
         transformed_image = transformed_image.numpy()
     transformed_image = transformed_image[0]
@@ -201,7 +199,7 @@ def result_exist(image_path, style):
     return os.path.exists(os.path.join(args.output_dir, style, image_path.split("/")[-1]))
 
 
-def main():
+def cli_cartoonization():
 
     start = datetime.now()
     logger.info(f"Transformed images will be saved to `{args.output_dir}` folder.")
@@ -251,7 +249,22 @@ def main():
 
     time_elapsed = datetime.now() - start
     logger.info(f"Total processing time: {time_elapsed}")
+def gui_cartoonization(style, filepath, filename):
+    # the interaction with the client may be in the form of socket programming
+    # in any case, the raw input image must be saved in client_image variable
+    # and the style name will be saved in a style variable
+    start = datetime.now()
 
+    model = cartoongan.load_model(style)
 
-if __name__ == "__main__":
-    main()
+    input_image = pre_processing(filepath)
+    transformed_image = model(input_image)
+    output_image = post_processing(transformed_image)
+    save_dir = \
+        os.path.join(
+        "C:\\Users\\psham\\PycharmProjects\\Cartoonization\\output_images", style, "\\input_images")
+    transformed_image_path = save_transformed_image(output_image, filename, save_dir)
+    time_elapsed = datetime.now() - start
+    return transformed_image_path, time_elapsed
+# if __name__ == "__main__":
+#     cli_cartoonization()
