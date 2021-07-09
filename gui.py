@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-# import PySimpleGUIQt as sg
 import os.path
 import PIL.Image
 import io
