@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        article, aside, figure, footer, header, hgroup,
+        menu, nav, section { display: block; }
+        </style>
+        <script>
+            var image_url;
+            var loadFile = function(event) {
+	            var image = document.getElementById('input_image');
+	            image_url = event.target.files[0];
+	            image.src = URL.createObjectURL(image_url);
+            };
+        </script>
+
+    </head>
+    <body>
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <input type='file' name="input_image_url" id='file' onchange="loadFile(event)" />
+            <img name="input_image" id="input_image" width="200" />
+            <input type="submit" name="convert" value="convert" />
+        </form>
+        <img name="output_image" id="output_image"
+             width="200" src="{{ user_image }}"/>
+    </body>
+</html>

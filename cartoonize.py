@@ -266,5 +266,16 @@ def gui_cartoonization(style, filepath, filename):
     transformed_image_path = save_transformed_image(output_image, filename, save_dir)
     time_elapsed = datetime.now() - start
     return transformed_image_path, time_elapsed
+def web_cartoonization(style, image_url):
+    start = datetime.now()
+
+    model = cartoongan.load_model(style)
+
+    input_image = pre_processing(image_url)
+    transformed_image = model(input_image)
+    output_image = post_processing(transformed_image)
+    output_image = PIL.Image.fromarray(output_image.astype("uint8"))
+    time_elapsed = datetime.now() - start
+    return output_image, time_elapsed
 # if __name__ == "__main__":
 #     cli_cartoonization()
