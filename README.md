@@ -8,7 +8,6 @@ This project is designed to convert real-life images into cartoon-style images u
 ## ✨ Features
 
 - 🖼️ Convert images to cartoon style with ease
-- 🔧 User-friendly interface
 - 📂 Supports multiple image formats
 - 🚀 High-performance processing
 
